@@ -3,3 +3,4 @@ keras
 numpy
 pillow
 opencv-python
+tensorflow
