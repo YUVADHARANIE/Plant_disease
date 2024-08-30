@@ -1,6 +1,4 @@
 streamlit
-keras
-numpy
-pillow
-opencv-python
 tensorflow
+pillow
+numpy
