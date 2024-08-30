@@ -1,40 +1,42 @@
 import streamlit as st
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
 import numpy as np
-from keras.models import load_model
 from PIL import Image
-import io
 
-# Load the model
-model_path = 'https://github.com/YUVADHARANIE/Plant_disease/blob/main/plant_disease%20(1).keras'
-model = load_model(model_path)
+# Load the trained model
+model = load_model('plant_disease(1).keras')  # Update the model path if needed
 
-# Class labels
-class_labels = ['Tomato_Bacterial_spot', 'Corn_Common_rust', 'Potato_Early_blight']
+# Define class names
+class_names = ['Tomato_Bacterial_spot', 'Corn_Common_rust', 'Potato_Early_blight']  # Adjust class names based on your model
 
-# Image preprocessing
-def preprocess_image(image):
-    image = image.resize((256, 256))  # Resize image to match model input
-    image_array = np.array(image) / 255.0  # Normalize pixel values
-    image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension
-    return image_array
+# Define the function to preprocess the uploaded image
+def preprocess_image(img):
+    img = img.resize((150, 150))  # Adjust size according to your model input
+    img_array = np.array(img) / 255.0  # Normalize the image
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
 
-# Prediction function
-def predict_image(image):
-    image_array = preprocess_image(image)
-    prediction = model.predict(image_array)
-    class_index = np.argmax(prediction, axis=1)[0]
-    return class_index
+# Function to predict class
+def predict_image(img):
+    img_preprocessed = preprocess_image(img)
+    predictions = model.predict(img_preprocessed)
+    predicted_class_index = np.argmax(predictions, axis=1)
+    return class_names[predicted_class_index[0]], predictions[0]
 
-# Streamlit app
-st.title("Plant Disease Classifier")
+# Define the Streamlit app
+st.title("Plant Disease Classification")
+st.write("Upload an image of a plant leaf to get a disease prediction.")
 
+# Upload image
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
+    # Load and preprocess the image
+    img = Image.open(uploaded_file)
+    predicted_class, prediction_probs = predict_image(img)
     
-    # Make prediction
-    class_index = predict_image(image)
-    st.write(f"Predicted class index: {class_index}")
-    st.write(f"Predicted class label: {class_labels[class_index]}")
+    # Display the result
+    st.image(img, caption='Uploaded Image', use_column_width=True)
+    st.write(f'Predicted Class: {predicted_class}')
+    st.write(f'Prediction Probabilities: {prediction_probs}')
