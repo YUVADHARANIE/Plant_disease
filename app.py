@@ -51,7 +51,7 @@ def main():
         st.write("Classifying...")
 
         # Load model
-        model_path = 'path/to/your/model/plant_disease.keras'  # Update with the correct path
+        model_path = 'plant_disease (1).keras'  # Update with the correct path
         model = load_keras_model(model_path)
 
         # Predict
