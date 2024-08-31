@@ -7,12 +7,18 @@ from PIL import Image
 # Load the trained model
 model = load_model('plant_disease.h5')  # Ensure the model path is correct
 
+# Print the model summary to check input shape (remove this line in production)
+model.summary()
+
+# Get the input shape from the model
+input_shape = model.input_shape[1:3]  # Extracting height and width
+
 # Define class names
 class_names = ['Tomato_Bacterial_spot', 'Corn_Common_rust', 'Potato_Early_blight']  # Adjust based on your model's classes
 
 # Define the function to preprocess the uploaded image
 def preprocess_image(img):
-    img = img.resize((150, 150))  # Resize image to match model input size
+    img = img.resize(input_shape)  # Resize image to match model input size
     img_array = np.array(img) / 255.0  # Normalize the image to [0, 1] range
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
     return img_array
