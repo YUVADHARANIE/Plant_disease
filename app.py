@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 # Load the trained model
-model = load_model('plant_disease(1).keras')  # Update the model path if needed
+model = load_model('plant_disease.h5')  # Update the model path if needed
 
 # Define class names
 class_names = ['Tomato_Bacterial_spot', 'Corn_Common_rust', 'Potato_Early_blight']  # Adjust class names based on your model
