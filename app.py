@@ -31,7 +31,7 @@ def predict_image(img):
     return class_names[predicted_class_index], predictions[0]
 
 # Define the Streamlit app
-st.title("Plant Disease Classification")
+st.title("Plant Disease Prediction by yuva")
 st.write("Upload an image of a plant leaf to get a disease prediction.")
 
 # Upload image
